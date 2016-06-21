@@ -33,6 +33,8 @@ resources:
         yum update -y
         yum install -y httpd mariadb php php-mysql
         echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+        systemctl is-enabled httpd.service || systemctl enable httpd.service
+        systemctl is-active httpd.service || systemctl start httpd.service
 
   lamp_deploy:
     type: OS::Heat::SoftwareDeployment
