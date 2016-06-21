@@ -62,4 +62,4 @@ outputs:
       str_replace:
         template: http://host/info.php
         params:
-          host: {get_attr: [lamp_server, accessIPv4]}
+          host: {get_attr: [lamp_server, networks, private, 0]}
