@@ -54,6 +54,10 @@ resources:
       software_config_transport: POLL_TEMP_URL
       user_data_format: SOFTWARE_CONFIG
       config_drive: True
+      metadata:
+        rax-heat: { get_param: "OS::stack_id" }
+        stack-name: { get_param: "OS::stack_name" }
+        build_config: "monitoring_defaults"
 
 outputs:
   server_php_info:
