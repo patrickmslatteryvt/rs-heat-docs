@@ -23,6 +23,7 @@ parameters:
     immutable: true
 
 resources:
+
   lamp_config:
     type: OS::Heat::SoftwareConfig
     properties:
@@ -35,6 +36,22 @@ resources:
         echo "<?php phpinfo(); ?>" > /var/www/html/info.php
         systemctl is-enabled httpd.service || systemctl enable httpd.service
         systemctl is-active httpd.service || systemctl start httpd.service
+        yum remove -y \
+          chef.x86_64 \
+          puppet.noarch \
+          facter.x86_64 \
+          hiera.noarch \
+          salt.noarch \
+          salt-minion.noarch \
+          openpgm.x86_64 \
+          python-babel.noarch \
+          ruby-augeas.x86_64 \
+          ruby-shadow.x86_64 \
+          rubygem-rgen.noarch \
+          xz-devel.x86_64 \
+          pcre-devel.x86_64 \
+          keyutils-libs-devel.x86_64 \
+          libverto-devel.x86_64
 
   lamp_deploy:
     type: OS::Heat::SoftwareDeployment
