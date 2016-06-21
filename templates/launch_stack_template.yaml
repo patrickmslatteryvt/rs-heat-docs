@@ -5,22 +5,22 @@ parameters:
   key_name:
     type: string
     description : Name of a key pair to enable SSH access to instances.
-    default: my_key
+    default: shared_initial_build_key
 
   flavor:
     type: string
-    description: Flavor to use for the WordPress server.
+    description: Flavor to use for the server.
     constraints:
       - custom_constraint: nova.flavor
-    default: 4 GB Performance
+    default: 1 GB General Purpose v1
 
   image:
     type: string
     description: >
       Name or ID of the image to use for the LAMP server.
       The image must have the software config agents baked-in.
-    default: f4bbbce2-50b0-4b07-bf09-96c175a45f4b
-
+    default: CentOS 7 (PVHVM) (Orchestration)
+    immutable: true
 
 resources:
   lamp_config:
@@ -29,9 +29,9 @@ resources:
       group: script
       config: |
         #!/bin/bash -v
-        export DEBIAN_FRONTEND=noninteractive
-        apt-get update
-        apt-get install -y apache2 mysql-server-5.5 php5 php-pear php5-mysql
+        yum clean all
+        yum update -y
+        yum install -y httpd mariadb php php-mysql
         echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 
   lamp_deploy:
@@ -47,7 +47,7 @@ resources:
     type: OS::Nova::Server
     properties:
       image: {get_param: image}
-      flavor: 2 GB Performance
+      flavor: {get_param: flavor}
       key_name: {get_param: key_name}
       software_config_transport: POLL_TEMP_URL
       user_data_format: SOFTWARE_CONFIG
